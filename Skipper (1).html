@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skipper — Michezo na Filamu</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--text:#14171f;--mute:#5d6577;--accent:#e8590c;--line:#e3e6ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1017;--card:#171b25;--text:#eef0f6;--mute:#9aa3b6;--line:#272d3b}}
+:root[data-theme="dark"]{--bg:#0d1017;--card:#171b25;--text:#eef0f6;--mute:#9aa3b6;--line:#272d3b}
+html{color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:14px 16px 10px;border-bottom:1px solid var(--line);z-index:5}
+.top{display:flex;align-items:center;justify-content:space-between;max-width:900px;margin:0 auto}
+h1{margin:0;font-size:1.6rem;letter-spacing:-.5px}h1 span{color:var(--accent)}
+.tabs{display:flex;gap:8px;max-width:900px;margin:12px auto 0}
+.tab{flex:1;padding:10px;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;font-size:1rem;cursor:pointer}
+.tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{max-width:900px;margin:0 auto;padding:16px}
+.search{display:flex;gap:8px;margin-bottom:16px}
+input{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:1rem;min-width:0}
+button.go{padding:12px 16px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;cursor:pointer}
+h2{font-size:1.05rem;margin:20px 0 10px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-decoration:none;color:var(--text)}
+a.card b{display:block;font-size:1rem}a.card small{color:var(--mute)}
+.em{font-size:1.6rem;display:block;margin-bottom:6px}
+.note{font-size:.85rem;color:var(--mute);margin-top:24px;line-height:1.5}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><h1>Skip<span>per</span></h1><small id="inst" style="color:var(--mute)">Michezo • Filamu</small></div>
+ <div class="tabs"><button class="tab on" id="t-sports">⚽ Michezo</button><button class="tab" id="t-movies">🎬 Filamu</button></div>
+</header>
+<main>
+ <div id="sports">
+  <div class="search"><input id="sq" placeholder="Tafuta timu au mchezo (mf. Simba, Arsenal)"><button class="go" id="sg">Tafuta</button></div>
+  <h2>Mpira wa miguu</h2><div class="grid" id="football"></div>
+  <h2>Michezo mingine</h2><div class="grid" id="other"></div>
+ </div>
+ <div id="movies" class="hide">
+  <div class="search"><input id="mq" placeholder="Tafuta filamu au series"><button class="go" id="mg">Tafuta</button></div>
+  <h2>Kategoria</h2><div class="grid" id="genres"></div>
+  <h2>Orodha bora</h2><div class="grid" id="lists"></div>
+ </div>
+ <p class="note">Skipper hukusanya njia za haraka za matokeo ya michezo na taarifa/trailers za filamu kutoka tovuti rasmi. Haihifadhi wala kuonyesha maudhui yenye hakimiliki.</p>
+</main>
+<script>
+var yt=function(q){return "https://www.youtube.com/results?search_query="+encodeURIComponent(q)};
+var football=[
+["🏴","Premier League","https://www.bbc.com/sport/football/premier-league/scores-fixtures"],
+["🇪🇸","La Liga","https://www.espn.com/soccer/league/_/name/esp.1"],
+["🇮🇹","Serie A","https://www.espn.com/soccer/league/_/name/ita.1"],
+["🇩🇪","Bundesliga","https://www.espn.com/soccer/league/_/name/ger.1"],
+["🏆","Champions League","https://www.uefa.com/uefachampionsleague/"],
+["🌍","CAF / Afrika","https://www.cafonline.com/"],
+["🇹🇿","NBC Premier League","https://www.flashscore.com/football/tanzania/nbc-premier-league/"],
+["🌐","Kombe la Dunia","https://www.fifa.com/en/tournaments/mens/worldcup"]];
+var other=[
+["🏀","NBA","https://www.nba.com/games"],["🏈","NFL","https://www.nfl.com/scores/"],
+["🥊","Ndondi / UFC","https://www.ufc.com/events"],["🎾","Tenisi","https://www.atptour.com/en/scores/current"],
+["🏎️","Formula 1","https://www.formula1.com/en/racing.html"],["🏏","Kriketi","https://www.espncricinfo.com/live-cricket-score"],
+["🏃","Riadha","https://worldathletics.org/"],["🏉","Raga","https://www.world.rugby/"],
+["⛳","Gofu","https://www.pgatour.com/leaderboard"],["⚾","MLB","https://www.mlb.com/scores"]];
+var genres=[["💥","Action"],["😂","Vichekesho"],["😱","Kutisha"],["❤️","Mapenzi"],["🚀","Sci-Fi"],["🎭","Drama"],["🧸","Katuni"],["🕵️","Uhalifu"],["🌍","Documentary"],["🇹🇿","Bongo Movies"],["🎞️","Nollywood"],["🇰🇷","K-Drama"]];
+var lists=[["⭐","IMDb Top 250","https://www.imdb.com/chart/top/"],["🔥","Maarufu sasa","https://www.imdb.com/chart/moviemeter/"],["🍅","Rotten Tomatoes","https://www.rottentomatoes.com/browse/movies_in_theaters/"],["🎬","Trailers mpya","https://www.youtube.com/results?search_query=new+movie+trailers"],["📺","Series bora","https://www.imdb.com/chart/toptv/"],["🆕","Zinazokuja","https://www.imdb.com/calendar/"]];
+function card(e,t,u,s){var a=document.createElement("a");a.className="card";a.href=u;a.target="_blank";a.rel="noopener";a.innerHTML='<span class="em">'+e+'</span><b></b>'+(s?'<small></small>':'');a.querySelector("b").textContent=t;if(s)a.querySelector("small").textContent=s;return a}
+function fill(id,arr,fn){var el=document.getElementById(id);arr.forEach(function(x){el.appendChild(fn(x))})}
+fill("football",football,function(x){return card(x[0],x[1],x[2])});
+fill("other",other,function(x){return card(x[0],x[1],x[2])});
+fill("genres",genres,function(x){return card(x[0],x[1],yt(x[1]+" movies trailers"),"Tazama trailers")});
+fill("lists",lists,function(x){return card(x[0],x[1],x[2])});
+function show(w){["sports","movies"].forEach(function(k){document.getElementById(k).classList.toggle("hide",k!==w);document.getElementById("t-"+k).classList.toggle("on",k===w)})}
+document.getElementById("t-sports").onclick=function(){show("sports")};
+document.getElementById("t-movies").onclick=function(){show("movies")};
+document.getElementById("sg").onclick=function(){var q=document.getElementById("sq").value.trim();if(q)window.open("https://www.google.com/search?q="+encodeURIComponent(q+" matokeo live"),"_blank")};
+document.getElementById("mg").onclick=function(){var q=document.getElementById("mq").value.trim();if(q)window.open("https://www.imdb.com/find/?q="+encodeURIComponent(q),"_blank")};
+["sq","mq"].forEach(function(i){document.getElementById(i).addEventListener("keydown",function(e){if(e.key==="Enter")document.getElementById(i==="sq"?"sg":"mg").click()})});
+</script>
+</body>
+</html>
